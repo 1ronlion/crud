@@ -34,30 +34,24 @@ const controller = {
 	// Create -  Method to store
 	store: (req, res) => {
 
-	let image 
+		let image
+		if(req.files[0] != undefined){
+			image = req.files[0].filename
+		}else{
+			image = "default-image.png"
+		}
 
-	if(req.files[0] != undefined){
+		let newProduct = {
+			id: products[products.length - 1].id + 1,
+			...req.body, 
+			image: image
+		}
 
-		image = req.files[0].filename
+		products.push(newProduct)
 
-	}else{
-
-		image = 'default-image.png'
-
-	}
-
-	let newProduct = {
-		id: products[products.length - 1].id + 1, 
-		...req.body,  
-		image : image 
-	}
-
-	products.push(newProduct)
-
-	fs.writeFileSync(productsFilePath, JSON.stringify(products));
-
-	res.redirect("/products")
-
+		fs.writeFileSync(productsFilePath, JSON.stringify(products, null, ''));
+		
+		res.redirect("/products")
 
 	},
 
@@ -72,30 +66,28 @@ const controller = {
 	},
 	// Update - Method to update
 	update: (req, res) => {
-		
+	
 		let id = req.params.id
 		let productToEdit = products.find(product => product.id == id)
 
-		let image 
+		
+		console.log("🚀 ~ file: productsController.js ~ line 78 ~ req.files", req.files)
 
+
+		let image
 		if(req.files[0] != undefined){
-	
 			image = req.files[0].filename
-	
 		}else{
-	
 			image = productToEdit.image
-	
 		}
-
-
+		
+		
 		productToEdit = {
 			id: productToEdit.id,
 			...req.body,
 			image: image,
 		}
-
-
+		
 		let newProduct = products.map(product => {
 
 			if (product.id == productToEdit.id) {
@@ -116,6 +108,12 @@ const controller = {
 	// Delete - Delete one product from DB
 	destroy : (req, res) => {
 		
+		let id = req.params.id
+		let productToDelete = products.filter(product => product.id != id)
+
+		fs.writeFileSync(productsFilePath, JSON.stringify(productToDelete));
+
+		res.redirect("/")
 
 	}
 };
