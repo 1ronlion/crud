@@ -3,8 +3,18 @@
 <!-- Include Head -->
 <%- include('partials/head', {title: 'Inicio'}) %>
 <body>
-	<!-- Header -->
+
+	<% if (isAuthenticated) { %>
+
+	<%- include('partials/userNavbar') %>
+
+	<% } else { %>
+		
 	<%- include('partials/headerNavbar') %>
+
+	<% } %>
+
+
 	<!-- /Header -->
 	
 	<!-- Banner -->

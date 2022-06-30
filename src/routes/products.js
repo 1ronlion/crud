@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer')
 const path = require ('path')
+const admin = require ('../middlewares/admin')
 
 
 // ************ Controller Require ************
@@ -32,11 +33,11 @@ const upload = multer({ storage: storage })
 
 /*** GET ALL PRODUCTS ***/ 
 
-router.get('/', productsController.index); 
+router.get('/', admin, productsController.index); 
 
 // /*** CREATE ONE PRODUCT ***/ 
 
-router.get('/create', productsController.create); 
+router.get('/create', admin, productsController.create); 
 router.post('/create', upload.any(), productsController.store); 
 
 
@@ -46,12 +47,12 @@ router.get('/detail/:id/', productsController.detail);
 
 // /*** EDIT ONE PRODUCT ***/ 
 
-router.get('/edit/:id/', productsController.edit); 
+router.get('/edit/:id/', admin, productsController.edit); 
 router.patch('/edit/:id/',upload.any(), productsController.update); 
 
 
 // /*** DELETE ONE PRODUCT***/ 
-router.delete('/delete/:id', productsController.destroy); 
+router.delete('/delete/:id', admin, productsController.destroy); 
 
 
 module.exports = router;

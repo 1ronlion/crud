@@ -12,6 +12,8 @@ const inSale = products.filter(product => product.category == 'in-sale')
 
 const controller = {
 	index: (req, res) => {
+		
+		// console.dir(app.locals.title)
 
 		res.render("index", {visited, inSale})
 
